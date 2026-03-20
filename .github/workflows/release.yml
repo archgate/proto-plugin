@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build WASM plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: moonrepo/build-wasm-plugin@v0
+        id: build
+        with:
+          target-dir: target
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.build.outputs.wasm-file }}
+          fail_on_unmatched_files: true

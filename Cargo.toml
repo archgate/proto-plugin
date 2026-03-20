@@ -1,0 +1,30 @@
+[package]
+name = "archgate_tool"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+extism-pdk = "1.4"
+proto_pdk = "0.32"
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+proto_pdk_test_utils = "0.43"
+starbase_sandbox = "0.8"
+tokio = { version = "1", features = ["full"] }
+
+[features]
+default = ["wasm"]
+wasm = []
+
+[profile.release]
+codegen-units = 1
+debug = false
+lto = true
+opt-level = "s"
+panic = "abort"
