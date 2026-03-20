@@ -17,10 +17,10 @@ jobs:
 
       - uses: moonrepo/build-wasm-plugin@v0
         id: build
-        with:
-          target-dir: target
 
       - uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.build.outputs.wasm-file }}
+          files: |
+            builds/*.wasm
+            builds/*.sha256
           fail_on_unmatched_files: true
