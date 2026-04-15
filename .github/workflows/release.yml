@@ -8,6 +8,12 @@ on:
 permissions:
   contents: write
 
+env:
+  # Suppress archgate CLI telemetry in CI so in-development cli_version values
+  # don't pollute PostHog product-usage metrics. Harmless for workflows that
+  # don't run the CLI.
+  ARCHGATE_TELEMETRY: "0"
+
 jobs:
   build:
     name: Build WASM plugin
