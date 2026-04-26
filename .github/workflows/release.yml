@@ -19,12 +19,12 @@ jobs:
     name: Build WASM plugin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      - uses: moonrepo/build-wasm-plugin@v0
+      - uses: moonrepo/build-wasm-plugin@60ff6f68ae0e0b4dc4b959835cd84b8d535403c2 # v0
         id: build
 
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           files: |
             builds/*.wasm
