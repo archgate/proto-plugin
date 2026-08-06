@@ -15,7 +15,7 @@ serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]
 proto_pdk_test_utils = "0.48"
-starbase_sandbox = "0.8"
+starbase_sandbox = "0.12"
 tokio = { version = "1", features = ["full"] }
 
 [features]
