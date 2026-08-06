@@ -131,10 +131,15 @@ jobs:
             exit 1
           fi
 
-  # Single required status check. Branch protection points at this job, so the
-  # compat matrix can grow or shrink without editing the protection rule.
-  ci:
-    name: CI
+  # The context required by the organization's `main-public` ruleset. The job
+  # name IS the status check name, so it must stay exactly "Validate Code" —
+  # renaming it stops the required check from ever reporting, and pull requests
+  # block waiting for a context that never arrives.
+  #
+  # Aggregating here means the compat matrix can grow or shrink without touching
+  # the org ruleset.
+  validate-code:
+    name: Validate Code
     if: always()
     needs:
       - lint
