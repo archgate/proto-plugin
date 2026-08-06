@@ -35,6 +35,10 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Nothing here pushes, so the token has no reason to stay in .git/config
+          # where a later step could read it.
+          persist-credentials: false
 
       - name: Install toolchain
         run: |
@@ -54,6 +58,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - uses: moonrepo/build-wasm-plugin@c446bcf166358a243559500352935eefbd58dd79 # v0
 
@@ -75,17 +81,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # The floor declared by minimum_proto_version. Proves the claim is honest.
-          - os: ubuntu-latest
-            proto: "0.60.0"
-          # Whatever proto ships today, across every OS the plugin supports.
-          - os: ubuntu-latest
-            proto: latest
-          - os: macos-latest
-            proto: latest
-          - os: windows-latest
-            proto: latest
+        # Every OS the plugin claims to support, against both the floor declared
+        # by minimum_proto_version and whatever proto ships today. The floor is a
+        # promise made on every platform, so it is verified on every platform.
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        proto:
+          - "0.60.0"
+          - latest
     steps:
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
@@ -118,7 +123,10 @@ jobs:
           # Trailing CR on Windows, and proto may prepend notices to stdout.
           version=$(printf '%s\n' "${output}" | tr -d '\r' | grep -v '^$' | tail -n1)
           echo "archgate reported: ${version}"
-          if ! grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+' <<<"${version}"; then
+          # Anchored at both ends: a prefix match would accept "0.51.0.1" or
+          # "0.51.0junk". Optional groups cover SemVer pre-release and build
+          # metadata so a release candidate does not fail the check.
+          if ! grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$' <<<"${version}"; then
             echo "::error::Expected a semantic version from 'archgate --version', got '${version}'"
             exit 1
           fi
