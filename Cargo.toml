@@ -1,6 +1,6 @@
 [package]
 name = "archgate_tool"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 license = "MIT"
 publish = false
@@ -10,11 +10,11 @@ crate-type = ["cdylib", "lib"]
 
 [dependencies]
 extism-pdk = "1.4"
-proto_pdk = "0.32"
+proto_pdk = "0.34"
 serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]
-proto_pdk_test_utils = "0.43"
+proto_pdk_test_utils = "0.48"
 starbase_sandbox = "0.8"
 tokio = { version = "1", features = ["full"] }
 
