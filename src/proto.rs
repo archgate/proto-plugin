@@ -43,6 +43,18 @@ pub fn download_prebuilt(
 
     let version = &input.context.version;
 
+    // Intel macOS binaries are published from v0.61.0 onward.
+    if env.os == HostOS::MacOS
+        && env.arch == HostArch::X64
+        && let Some(resolved) = version.as_version()
+        && *resolved < Version::new(0, 61, 0)
+    {
+        return Err(Error::msg(format!(
+            "{NAME} {resolved} has no Intel macOS build; Intel macOS requires version 0.61.0 or later"
+        ))
+        .into());
+    }
+
     let (os, arch) = match (&env.os, &env.arch) {
         (HostOS::MacOS, HostArch::Arm64) => ("darwin", "arm64"),
         (HostOS::MacOS, HostArch::X64) => ("darwin", "x64"),
