@@ -36,7 +36,7 @@ pub fn download_prebuilt(
         env,
         permutations! [
             HostOS::Linux => [HostArch::X64],
-            HostOS::MacOS => [HostArch::Arm64],
+            HostOS::MacOS => [HostArch::Arm64, HostArch::X64],
             HostOS::Windows => [HostArch::X64],
         ],
     )?;
@@ -45,6 +45,7 @@ pub fn download_prebuilt(
 
     let (os, arch) = match (&env.os, &env.arch) {
         (HostOS::MacOS, HostArch::Arm64) => ("darwin", "arm64"),
+        (HostOS::MacOS, HostArch::X64) => ("darwin", "x64"),
         (HostOS::Linux, HostArch::X64) => ("linux", "x64"),
         (HostOS::Windows, HostArch::X64) => ("win32", "x64"),
         _ => unreachable!(),

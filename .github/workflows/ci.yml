@@ -87,6 +87,7 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
+          - macos-15-intel
           - windows-latest
         proto:
           - "0.60.0"
